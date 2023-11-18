@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 public enum Token_Class
 {
-    Else, ElseIf, EndIf, If, Integer, Float, String, Read, Then, While, Write, Repeat,
-    Dot, Semicolon, Comma, LParanthesis, RParanthesis, EqualOp, LessThanOp,
-    GreaterThanOp, NotEqualOp, PlusOp, MinusOp, MultiplyOp, DivideOp,
-    Idenifier, Constant
+    Else, ElseIf, Endl, If, Integer, Float, String, Read, Then, Write, Repeat, Until, Return,
+    AndOp, OrOp, Dot, Semicolon, Comma, LParanthesis, RParanthesis, LCurlBracket, RCurlBracket, EqualOp, LessThanOp,
+    GreaterThanOp, NotEqualOp, PlusOp, MinusOp, MultiplyOp, DivideOp, AssignmentOp,
+    Idenifier, Number, StringWord
 }
 namespace JASON_Compiler
 {
@@ -39,20 +39,29 @@ namespace JASON_Compiler
             ReservedWords.Add("read", Token_Class.Read);
             ReservedWords.Add("write", Token_Class.Write);
             ReservedWords.Add("repeat", Token_Class.Repeat);
+            ReservedWords.Add("until", Token_Class.Until);
+            ReservedWords.Add("then", Token_Class.Then);
+            ReservedWords.Add("return", Token_Class.Return);
+            ReservedWords.Add("endl", Token_Class.Endl);
 
             Operators.Add(".", Token_Class.Dot);
             Operators.Add(";", Token_Class.Semicolon);
+            Operators.Add("{", Token_Class.LCurlBracket);
+            Operators.Add("}", Token_Class.RCurlBracket);
             Operators.Add(",", Token_Class.Comma);
             Operators.Add("(", Token_Class.LParanthesis);
             Operators.Add(")", Token_Class.RParanthesis);
             Operators.Add("=", Token_Class.EqualOp);
+            Operators.Add(":=", Token_Class.AssignmentOp);
             Operators.Add("<", Token_Class.LessThanOp);
             Operators.Add(">", Token_Class.GreaterThanOp);
-            Operators.Add("!", Token_Class.NotEqualOp);
+            Operators.Add("<>", Token_Class.NotEqualOp);
             Operators.Add("+", Token_Class.PlusOp);
             Operators.Add("-", Token_Class.MinusOp);
             Operators.Add("*", Token_Class.MultiplyOp);
             Operators.Add("/", Token_Class.DivideOp);
+            Operators.Add("&&", Token_Class.AndOp);
+            Operators.Add("||", Token_Class.OrOp);
 
 
 
@@ -126,68 +135,124 @@ namespace JASON_Compiler
             Token_Class TC;
             Token Tok = new Token();
             Tok.lex = Lex;
+
             //Is it a reserved word?
             if(ReservedWords.ContainsKey(Lex))
             {
                 Tok.token_type = ReservedWords[Lex];
                 Tokens.Add(Tok);
-                return;
             }
 
             //Is it an identifier?
-            if(isIdentifier(Lex))
+            else if(isIdentifier(Lex))
             {
                 Tok.token_type = Token_Class.Idenifier;
                 Tokens.Add(Tok);
-                return;
-            }
-
-            //Is it a Constant?
-            if (isConstant(Lex))
-            {
-                Tok.token_type = Token_Class.Constant;
-                Tokens.Add(Tok);
-                return;
             }
 
             //Is it an operator?
-            if (Operators.ContainsKey(Lex))
+            else if (Operators.ContainsKey(Lex))
             {
                 Tok.token_type = Operators[Lex];
                 Tokens.Add(Tok);
-                return;
+            }
+
+            //Is it an integer?
+            else if(isInt(Lex))
+            {
+                Tok.token_type = Token_Class.Integer;
+                Tokens.Add(Tok);
+            }
+
+            //Is it an float?
+            else if (isFloat(Lex))
+            {
+                Tok.token_type = Token_Class.Float;
+                Tokens.Add(Tok);
+            }
+
+            //Is it an number?
+            else if (isNumber(Lex))
+            {
+                Tok.token_type = Token_Class.Number;
+                Tokens.Add(Tok);
+            }
+
+            //Is it a string?
+            else if (isString(Lex))
+            {
+                Tok.token_type = Token_Class.StringWord;
+                Tokens.Add(Tok);
             }
 
             //Is it an undefined?
-            Errors.Error_List.Add(Lex);
+            else
+            {
+                Errors.Error_List.Add(Lex);
+            }
         }
 
     
 
         bool isIdentifier(string lex)
         {
-            bool isValid=true;
             // Check if the lex is an identifier or not.
-            Regex re = new Regex(@"^[a-zA-Z][a-zA-Z0-9]*$", RegexOptions.Compiled);
+            bool isValid = true;
+            Regex regexIdentifier = new Regex(@"^[a-zA-Z][a-zA-Z0-9]*$", RegexOptions.Compiled);
 
-            if (!re.IsMatch(lex))
+            if (!regexIdentifier.IsMatch(lex))
             {
                 isValid = false;
             }
             return isValid;
         }
-        bool isConstant(string lex)
+        bool isNumber(string lex)
         {
+            // Check if the lex is a number or not.
             bool isValid = true;
-            // Check if the lex is a constant (Number) or not.
-            Regex intRegex = new Regex(@"^\d+$", RegexOptions.Compiled);
-            Regex floatRegex = new Regex(@"^\d+\.\d+$", RegexOptions.Compiled);
+            Regex regexNumber = new Regex(@"^[0-9]+(\.[0-9]+)?$", RegexOptions.Compiled);
+            if(!regexNumber.IsMatch(lex))
+            {
+                isValid= false;
+            }
+            return isValid;
+        }
 
-            if (!intRegex.IsMatch(lex) || !floatRegex.IsMatch(lex))
+        bool isInt(string lex)
+        {
+            // Check if the lex is an integer or not.
+            bool isValid = true; 
+            Regex regexInt = new Regex(@"^[0-9]+$", RegexOptions.Compiled);
+            if(!regexInt.IsMatch(lex))
             {
                 isValid = false;
             }
             return isValid;
+        }
+
+        bool isFloat(string lex)
+        {
+            // Check if the lex is a float or not.
+            bool isValid = true; 
+            Regex regexFloat = new Regex(@"^[0-9]+(\.[0-9]+)$", RegexOptions.Compiled);
+            if(!regexFloat.IsMatch(lex))
+            {
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        bool isString(string lex)
+        {
+            // Check if the lex is a string or not.
+            bool isValid = true;
+            Regex regexString = new Regex("\"(^\")\"", RegexOptions.Compiled);
+            if(!regexString.IsMatch(lex))
+            {
+                isValid = false;
+            }
+            return isValid;
+
         }
     }
 }
