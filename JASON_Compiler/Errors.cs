@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JASON_Compiler
+namespace TINY_Compiler
 {
     public static class Errors
     {

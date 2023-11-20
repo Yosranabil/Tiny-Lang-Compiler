@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 
 public enum Token_Class
 {
-    Else, ElseIf, Endl, If, Integer, Float, String, Read, Then, Write, Repeat, Until, Return, Main, End,
+    Else, ElseIf, Endl, If, IntegerDT, FloatDT, StringDT, Read, Then, Write, Repeat, Until, Return, Main, End,
     AndOp, OrOp, Dot, Semicolon, Comma, LParanthesis, RParanthesis, LCurlBracket, RCurlBracket, EqualOp, LessThanOp,
     GreaterThanOp, NotEqualOp, PlusOp, MinusOp, MultiplyOp, DivideOp, AssignmentOp,
-    Idenifier, Number, StringWord
+    Idenifier, Number, String, Comment
 }
-namespace JASON_Compiler
+namespace TINY_Compiler
 {
-    
-
     public class Token
     {
        public string lex;
@@ -33,9 +31,9 @@ namespace JASON_Compiler
             ReservedWords.Add("if", Token_Class.If);
             ReservedWords.Add("elseif", Token_Class.ElseIf);
             ReservedWords.Add("else", Token_Class.Else);
-            ReservedWords.Add("int", Token_Class.Integer);
-            ReservedWords.Add("float", Token_Class.Float);
-            ReservedWords.Add("string", Token_Class.String);
+            ReservedWords.Add("int", Token_Class.IntegerDT);
+            ReservedWords.Add("float", Token_Class.FloatDT);
+            ReservedWords.Add("string", Token_Class.StringDT);
             ReservedWords.Add("read", Token_Class.Read);
             ReservedWords.Add("write", Token_Class.Write);
             ReservedWords.Add("repeat", Token_Class.Repeat);
@@ -64,9 +62,6 @@ namespace JASON_Compiler
             Operators.Add("/", Token_Class.DivideOp);
             Operators.Add("&&", Token_Class.AndOp);
             Operators.Add("||", Token_Class.OrOp);
-
-
-
         }
 
     public void StartScanning(string SourceCode)
@@ -103,25 +98,49 @@ namespace JASON_Compiler
 
                 else if (CurrentChar >= '0' && CurrentChar <= '9')
                 {
-                   for(j = i + 1; j < SourceCode.Length; j++)
-                   {
+                    for (j = i + 1; j < SourceCode.Length; j++)
+                    {
                         CurrentChar = SourceCode[j];
-                        if ((CurrentChar >= '0' && CurrentChar <= '9'))
+                        if (CurrentChar == '=' || CurrentChar == '+' || CurrentChar == '-' || CurrentChar == '/' ||
+                            CurrentChar == '*' || CurrentChar == '<' || CurrentChar == '>' || CurrentChar == '&' ||
+                            CurrentChar == ':' || CurrentChar == ';' || CurrentChar == ',' || CurrentChar == ')' ||
+                            CurrentChar == ' ' || CurrentChar == '\n' || CurrentChar == '\r')
                         {
-                            CurrentLexeme += CurrentChar.ToString();
+                            i = j - 1; break;
                         }
-                   }
-                   i = j - 1;
-                   FindTokenClass(CurrentLexeme);
+                        CurrentLexeme += CurrentChar.ToString();
+                    }
+                    FindTokenClass(CurrentLexeme);
                 }
-                else if(CurrentChar == '{')
+                else if (CurrentChar == '/' && SourceCode[j + 1] == '*')
                 {
-                   while(CurrentChar != '}')
-                   {
-                        j++;
-                        continue;
-                   }
-                    i = j - 1;
+                    for (j = i + 1; j < SourceCode.Length; j++)
+                    {
+                        CurrentChar = SourceCode[j];
+                        CurrentLexeme += CurrentChar.ToString();
+
+                        if (CurrentChar == '/')
+                        {
+                            FindTokenClass(CurrentLexeme);
+                            break;
+                        }
+                    }
+                    i = j + 1;
+                }
+                else if (CurrentChar == '&' || CurrentChar == '|')
+                {
+                    for (j = i + 1; j < SourceCode.Length; j++)
+                    {
+                        CurrentChar = SourceCode[j];
+                        CurrentLexeme += CurrentChar.ToString();
+
+                        if ((CurrentChar == '&' && SourceCode[j + 1] == '&') || (CurrentChar == '|' && SourceCode[j + 1] == '|'))
+                        {
+                            FindTokenClass(CurrentLexeme);
+                            break;
+                        }
+                    }
+                    i = j + 1;
                 }
                 else
                 {
@@ -129,7 +148,7 @@ namespace JASON_Compiler
                 }
             }
             
-            JASON_Compiler.TokenStream = Tokens;
+            TINY_Compiler.TokenStream = Tokens;
         }
         void FindTokenClass(string Lex)
         {
@@ -161,14 +180,14 @@ namespace JASON_Compiler
             //Is it an integer?
             else if(isInt(Lex))
             {
-                Tok.token_type = Token_Class.Integer;
+                Tok.token_type = Token_Class.IntegerDT;
                 Tokens.Add(Tok);
             }
 
             //Is it an float?
             else if (isFloat(Lex))
             {
-                Tok.token_type = Token_Class.Float;
+                Tok.token_type = Token_Class.FloatDT;
                 Tokens.Add(Tok);
             }
 
@@ -182,7 +201,14 @@ namespace JASON_Compiler
             //Is it a string?
             else if (isString(Lex))
             {
-                Tok.token_type = Token_Class.StringWord;
+                Tok.token_type = Token_Class.String;
+                Tokens.Add(Tok);
+            }
+
+            //Is it a comment?
+            else if (isComment(Lex))
+            {
+                Tok.token_type = Token_Class.Comment;
                 Tokens.Add(Tok);
             }
 
@@ -192,9 +218,7 @@ namespace JASON_Compiler
                 Errors.Error_List.Add(Lex);
             }
         }
-
     
-
         bool isIdentifier(string lex)
         {
             // Check if the lex is an identifier or not.
@@ -254,6 +278,17 @@ namespace JASON_Compiler
             }
             return isValid;
 
+        }
+
+        bool isComment(string lex)
+        {
+            bool isValid = true;
+            Regex regexComment = new Regex("\\/\\*[\\s\\S]*?\\*\\/", RegexOptions.Compiled);
+            if (!regexComment.IsMatch(lex))
+            {
+                isValid = false;
+            }
+            return isValid;
         }
     }
 }
