@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public enum Token_Class
 {
-    Else, ElseIf, Endl, If, Integer, Float, String, Read, Then, Write, Repeat, Until, Return,
+    Else, ElseIf, Endl, If, Integer, Float, String, Read, Then, Write, Repeat, Until, Return, Main, End,
     AndOp, OrOp, Dot, Semicolon, Comma, LParanthesis, RParanthesis, LCurlBracket, RCurlBracket, EqualOp, LessThanOp,
     GreaterThanOp, NotEqualOp, PlusOp, MinusOp, MultiplyOp, DivideOp, AssignmentOp,
     Idenifier, Number, StringWord
@@ -43,6 +43,8 @@ namespace JASON_Compiler
             ReservedWords.Add("then", Token_Class.Then);
             ReservedWords.Add("return", Token_Class.Return);
             ReservedWords.Add("endl", Token_Class.Endl);
+            ReservedWords.Add("main", Token_Class.Main);
+            ReservedWords.Add("end", Token_Class.End);
 
             Operators.Add(".", Token_Class.Dot);
             Operators.Add(";", Token_Class.Semicolon);
@@ -78,17 +80,16 @@ namespace JASON_Compiler
                 if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n')
                     continue;
 
-                if (CurrentChar >= 'A' && CurrentChar <= 'z') //if you read a character
+                if (CurrentChar >= 'A' && CurrentChar <= 'Z' || CurrentChar >= 'a' && CurrentChar <= 'z') //if you read a character
                 {
-                    CurrentLexeme = CurrentChar.ToString(); // Start with the current character
 
                     for (j = i + 1; j < SourceCode.Length; j++)
                     {
                         CurrentChar = SourceCode[j];
 
-                        if ((CurrentChar >= 'A' && CurrentChar <= 'z'))
+                        if ((CurrentChar >= 'A' && CurrentChar <= 'z') || (CurrentChar >= '0' && CurrentChar <= '9'))
                         {
-                            CurrentLexeme += CurrentChar; // Append the character to the lexeme
+                            CurrentLexeme += CurrentChar;
                         }
                         else
                         {
@@ -96,7 +97,6 @@ namespace JASON_Compiler
                             break;
                         }
                     }
-
                     FindTokenClass(CurrentLexeme);
                 }
 
@@ -105,6 +105,7 @@ namespace JASON_Compiler
                 {
                    for(j = i + 1; j < SourceCode.Length; j++)
                    {
+                        CurrentChar = SourceCode[j];
                         if ((CurrentChar >= '0' && CurrentChar <= '9'))
                         {
                             CurrentLexeme += CurrentChar.ToString();
