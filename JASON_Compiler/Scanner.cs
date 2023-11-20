@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 public enum Token_Class
 {
-    Else, ElseIf, Endl, If, IntegerDT, FloatDT, StringDT, Read, Then, Write, Repeat, Until, Return, Main, End,
+    Else_KW, ElseIf_KW, Endl_KW, If_KW, Integer_KW, Float_KW, String_KW, Read_KW, Then_KW, Write_KW, Repeat_KW, Until_KW, Return_KW, Main_KW, End_KW,
     AndOp, OrOp, Dot, Semicolon, Comma, LParanthesis, RParanthesis, LCurlBracket, RCurlBracket, EqualOp, LessThanOp,
     GreaterThanOp, NotEqualOp, PlusOp, MinusOp, MultiplyOp, DivideOp, AssignmentOp,
-    Idenifier, Number, String, Comment
+    Idenifier, Number, String, Float, Comment
 }
 namespace TINY_Compiler
 {
@@ -28,21 +28,21 @@ namespace TINY_Compiler
 
         public Scanner()
         {
-            ReservedWords.Add("if", Token_Class.If);
-            ReservedWords.Add("elseif", Token_Class.ElseIf);
-            ReservedWords.Add("else", Token_Class.Else);
-            ReservedWords.Add("int", Token_Class.IntegerDT);
-            ReservedWords.Add("float", Token_Class.FloatDT);
-            ReservedWords.Add("string", Token_Class.StringDT);
-            ReservedWords.Add("read", Token_Class.Read);
-            ReservedWords.Add("write", Token_Class.Write);
-            ReservedWords.Add("repeat", Token_Class.Repeat);
-            ReservedWords.Add("until", Token_Class.Until);
-            ReservedWords.Add("then", Token_Class.Then);
-            ReservedWords.Add("return", Token_Class.Return);
-            ReservedWords.Add("endl", Token_Class.Endl);
-            ReservedWords.Add("main", Token_Class.Main);
-            ReservedWords.Add("end", Token_Class.End);
+            ReservedWords.Add("if", Token_Class.If_KW);
+            ReservedWords.Add("elseif", Token_Class.ElseIf_KW);
+            ReservedWords.Add("else", Token_Class.Else_KW);
+            ReservedWords.Add("int", Token_Class.Integer_KW);
+            ReservedWords.Add("float", Token_Class.Float_KW);
+            ReservedWords.Add("string", Token_Class.String_KW);
+            ReservedWords.Add("read", Token_Class.Read_KW);
+            ReservedWords.Add("write", Token_Class.Write_KW);
+            ReservedWords.Add("repeat", Token_Class.Repeat_KW);
+            ReservedWords.Add("until", Token_Class.Until_KW);
+            ReservedWords.Add("then", Token_Class.Then_KW);
+            ReservedWords.Add("return", Token_Class.Return_KW);
+            ReservedWords.Add("endl", Token_Class.Endl_KW);
+            ReservedWords.Add("main", Token_Class.Main_KW);
+            ReservedWords.Add("end", Token_Class.End_KW);
 
             Operators.Add(".", Token_Class.Dot);
             Operators.Add(";", Token_Class.Semicolon);
@@ -96,7 +96,7 @@ namespace TINY_Compiler
                 }
 
 
-                else if (CurrentChar >= '0' && CurrentChar <= '9')
+                else if (CurrentChar >= '0' && CurrentChar <= '9')//if you read a number
                 {
                     for (j = i + 1; j < SourceCode.Length; j++)
                     {
@@ -112,8 +112,10 @@ namespace TINY_Compiler
                     }
                     FindTokenClass(CurrentLexeme);
                 }
-                else if (CurrentChar == '/' && SourceCode[j + 1] == '*')
+                else if (CurrentChar == '/' && SourceCode[j + 1] == '*')//if you read a comment
                 {
+                    bool isValidComment = true;
+
                     for (j = i + 1; j < SourceCode.Length; j++)
                     {
                         CurrentChar = SourceCode[j];
@@ -121,26 +123,100 @@ namespace TINY_Compiler
 
                         if (CurrentChar == '/')
                         {
-                            FindTokenClass(CurrentLexeme);
+                            
                             break;
                         }
                     }
-                    i = j + 1;
+                    if (j == SourceCode.Length)
+                    {
+                        isValidComment = false;
+                    }
+
+                    if (isValidComment)
+                    {
+                        i = j + 1;
+                    }
+                    else
+                    {
+                        Errors.Error_List.Add(CurrentLexeme);
+                        break;
+                    }
                 }
-                else if (CurrentChar == '&' || CurrentChar == '|')
+                else if (CurrentChar == '&' || CurrentChar == '|')//if you read a boolean operator
                 {
                     for (j = i + 1; j < SourceCode.Length; j++)
                     {
                         CurrentChar = SourceCode[j];
                         CurrentLexeme += CurrentChar.ToString();
 
-                        if ((CurrentChar == '&' && SourceCode[j + 1] == '&') || (CurrentChar == '|' && SourceCode[j + 1] == '|'))
+                        if ((CurrentLexeme == "&&" && SourceCode[j + 1] != '&') || (CurrentLexeme == "||" && SourceCode[j + 1] != '|'))
                         {
                             FindTokenClass(CurrentLexeme);
                             break;
                         }
                     }
-                    i = j + 1;
+                    i = j;
+                }
+                else if(CurrentChar == ':')//if you read an assign operator
+                {
+                    for (j = i + 1; j < SourceCode.Length; j++)
+                    {
+                        CurrentChar = SourceCode[j];
+                        CurrentLexeme += CurrentChar.ToString();
+
+                        if (CurrentChar == '=')
+                        {
+                            FindTokenClass(CurrentLexeme);
+                            break;
+                        }
+                    }
+                }
+                else if(CurrentChar == '\"')//if you read a string
+                {
+                    for (j = i + 1; j < SourceCode.Length; j++)
+                    {
+                        CurrentChar = SourceCode[j];
+                        CurrentLexeme += CurrentChar.ToString();
+
+                        if (CurrentChar == '\"')
+                        {
+                            FindTokenClass(CurrentLexeme);
+                            break;
+                        }
+                    }
+                    i = j - 1;
+                }
+                else if(CurrentChar == '.')//if you read float
+                {
+                    for (j = i + 1; j < SourceCode.Length; j++)
+                    {
+                        CurrentChar = SourceCode[j];
+                        CurrentLexeme += CurrentChar.ToString();
+
+                        if ((CurrentChar >= '0' && CurrentChar <= '9'))
+                        {
+                            CurrentLexeme += CurrentChar.ToString();
+                        }
+                        else
+                        {
+                            i = j - 1; break;
+                        }
+                    }
+                    FindTokenClass(CurrentLexeme);
+                }
+                else if(CurrentChar == '<')//if you read not equal <> condition operator 
+                {
+                    for (j = i + 1; j < SourceCode.Length; j++)
+                    {
+                        CurrentChar = SourceCode[j];
+                        CurrentLexeme += CurrentChar.ToString();
+
+                        if (CurrentChar == '>')
+                        {
+                            FindTokenClass(CurrentLexeme);
+                            break;
+                        }
+                    }
                 }
                 else
                 {
@@ -177,17 +253,11 @@ namespace TINY_Compiler
                 Tokens.Add(Tok);
             }
 
-            //Is it an integer?
-            else if(isInt(Lex))
-            {
-                Tok.token_type = Token_Class.IntegerDT;
-                Tokens.Add(Tok);
-            }
 
             //Is it an float?
             else if (isFloat(Lex))
             {
-                Tok.token_type = Token_Class.FloatDT;
+                Tok.token_type = Token_Class.Float;
                 Tokens.Add(Tok);
             }
 
@@ -202,13 +272,6 @@ namespace TINY_Compiler
             else if (isString(Lex))
             {
                 Tok.token_type = Token_Class.String;
-                Tokens.Add(Tok);
-            }
-
-            //Is it a comment?
-            else if (isComment(Lex))
-            {
-                Tok.token_type = Token_Class.Comment;
                 Tokens.Add(Tok);
             }
 
@@ -243,18 +306,6 @@ namespace TINY_Compiler
             return isValid;
         }
 
-        bool isInt(string lex)
-        {
-            // Check if the lex is an integer or not.
-            bool isValid = true; 
-            Regex regexInt = new Regex(@"^[0-9]+$", RegexOptions.Compiled);
-            if(!regexInt.IsMatch(lex))
-            {
-                isValid = false;
-            }
-            return isValid;
-        }
-
         bool isFloat(string lex)
         {
             // Check if the lex is a float or not.
@@ -271,20 +322,8 @@ namespace TINY_Compiler
         {
             // Check if the lex is a string or not.
             bool isValid = true;
-            Regex regexString = new Regex("\"(^\")\"", RegexOptions.Compiled);
-            if(!regexString.IsMatch(lex))
-            {
-                isValid = false;
-            }
-            return isValid;
-
-        }
-
-        bool isComment(string lex)
-        {
-            bool isValid = true;
-            Regex regexComment = new Regex("\\/\\*[\\s\\S]*?\\*\\/", RegexOptions.Compiled);
-            if (!regexComment.IsMatch(lex))
+            Regex regexString = new Regex("\"(.*?)\"", RegexOptions.Compiled);
+            if (!regexString.IsMatch(lex))
             {
                 isValid = false;
             }
