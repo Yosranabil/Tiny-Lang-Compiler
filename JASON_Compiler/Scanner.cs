@@ -64,9 +64,11 @@ namespace TINY_Compiler
             Operators.Add("||", Token_Class.OrOp);
         }
 
-    public void StartScanning(string SourceCode)
+        public void StartScanning(string SourceCode)
     {
-            for(int i=0; i<SourceCode.Length;i++)
+            bool expectingSemicolon = false;
+
+            for (int i=0; i<SourceCode.Length;i++)
             {
                 int j = i;
                 char CurrentChar = SourceCode[i];
@@ -138,8 +140,7 @@ namespace TINY_Compiler
                     }
                     else
                     {
-                        Errors.Error_List.Add(CurrentLexeme);
-                        break;
+                        Errors.Error_List.Add($"Wrong Comment Format in {CurrentLexeme}");
                     }
                 }
                 else if (CurrentChar == '&' || CurrentChar == '|')//if you read a boolean operator
@@ -170,9 +171,12 @@ namespace TINY_Compiler
                             break;
                         }
                     }
+                    i = j + 1;
                 }
                 else if(CurrentChar == '\"')//if you read a string
                 {
+                    bool isValidString = true;
+
                     for (j = i + 1; j < SourceCode.Length; j++)
                     {
                         CurrentChar = SourceCode[j];
@@ -180,11 +184,24 @@ namespace TINY_Compiler
 
                         if (CurrentChar == '\"')
                         {
-                            FindTokenClass(CurrentLexeme);
+
                             break;
                         }
                     }
-                    i = j - 1;
+                    if (j == SourceCode.Length)
+                    {
+                        isValidString = false;
+                    }
+
+                    if (isValidString)
+                    {
+                        FindTokenClass(CurrentLexeme);
+                        i = j + 1;
+                    }
+                    else
+                    {
+                        Errors.Error_List.Add($"Wrong string Format in {CurrentLexeme}");
+                    }
                 }
                 else if(CurrentChar == '.')//if you read float
                 {
@@ -204,19 +221,15 @@ namespace TINY_Compiler
                     }
                     FindTokenClass(CurrentLexeme);
                 }
-                else if(CurrentChar == '<')//if you read not equal <> condition operator 
+                else if (CurrentChar == '<') // if you read less than operator
                 {
-                    for (j = i + 1; j < SourceCode.Length; j++)
+                    if (SourceCode[j + 1] == '>')
                     {
-                        CurrentChar = SourceCode[j];
-                        CurrentLexeme += CurrentChar.ToString();
-
-                        if (CurrentChar == '>')
-                        {
-                            FindTokenClass(CurrentLexeme);
-                            break;
-                        }
+                        CurrentLexeme += SourceCode[j + 1];
+                        i = j + 1;
                     }
+
+                    FindTokenClass(CurrentLexeme);
                 }
                 else
                 {
@@ -228,12 +241,16 @@ namespace TINY_Compiler
         }
         void FindTokenClass(string Lex)
         {
-            Token_Class TC;
             Token Tok = new Token();
             Tok.lex = Lex;
 
+            if (string.IsNullOrWhiteSpace(Lex))
+            {
+                return;
+            }
+
             //Is it a reserved word?
-            if(ReservedWords.ContainsKey(Lex))
+            if (ReservedWords.ContainsKey(Lex))
             {
                 Tok.token_type = ReservedWords[Lex];
                 Tokens.Add(Tok);
@@ -278,7 +295,7 @@ namespace TINY_Compiler
             //Is it an undefined?
             else
             {
-                Errors.Error_List.Add(Lex);
+                Errors.Error_List.Add($"Couldn't find token class for {Lex}");
             }
         }
     
@@ -329,5 +346,6 @@ namespace TINY_Compiler
             }
             return isValid;
         }
+
     }
 }
