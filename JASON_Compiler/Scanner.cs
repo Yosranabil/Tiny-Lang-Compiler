@@ -16,8 +16,8 @@ namespace TINY_Compiler
 {
     public class Token
     {
-       public string lex;
-       public Token_Class token_type;
+        public string lex;
+        public Token_Class token_type;
     }
 
     public class Scanner
@@ -65,10 +65,10 @@ namespace TINY_Compiler
         }
 
         public void StartScanning(string SourceCode)
-    {
+        {
             bool expectingSemicolon = false;
 
-            for (int i=0; i<SourceCode.Length;i++)
+            for (int i = 0; i < SourceCode.Length; i++)
             {
                 int j = i;
                 char CurrentChar = SourceCode[i];
@@ -125,7 +125,7 @@ namespace TINY_Compiler
 
                         if (CurrentChar == '/')
                         {
-                            
+
                             break;
                         }
                     }
@@ -158,7 +158,7 @@ namespace TINY_Compiler
                     }
                     i = j;
                 }
-                else if(CurrentChar == ':')//if you read an assign operator
+                else if (CurrentChar == ':')//if you read an assign operator
                 {
                     for (j = i + 1; j < SourceCode.Length; j++)
                     {
@@ -173,7 +173,7 @@ namespace TINY_Compiler
                     }
                     i = j + 1;
                 }
-                else if(CurrentChar == '\"')//if you read a string
+                else if (CurrentChar == '\"')//if you read a string
                 {
                     bool isValidString = true;
 
@@ -203,7 +203,7 @@ namespace TINY_Compiler
                         Errors.Error_List.Add($"Wrong string Format in {CurrentLexeme}");
                     }
                 }
-                else if(CurrentChar == '.')//if you read float
+                else if (CurrentChar == '.')//if you read float
                 {
                     for (j = i + 1; j < SourceCode.Length; j++)
                     {
@@ -221,7 +221,7 @@ namespace TINY_Compiler
                     }
                     FindTokenClass(CurrentLexeme);
                 }
-                else if (CurrentChar == '<') // if you read less than operator
+                else if (CurrentChar == '<') // if you read <>, < operators
                 {
                     if (SourceCode[j + 1] == '>')
                     {
@@ -236,7 +236,7 @@ namespace TINY_Compiler
                     FindTokenClass(CurrentChar.ToString());
                 }
             }
-            
+
             TINY_Compiler.TokenStream = Tokens;
         }
         void FindTokenClass(string Lex)
@@ -257,7 +257,7 @@ namespace TINY_Compiler
             }
 
             //Is it an identifier?
-            else if(isIdentifier(Lex))
+            else if (isIdentifier(Lex))
             {
                 Tok.token_type = Token_Class.Idenifier;
                 Tokens.Add(Tok);
@@ -298,7 +298,7 @@ namespace TINY_Compiler
                 Errors.Error_List.Add($"Couldn't find token class for {Lex}");
             }
         }
-    
+
         bool isIdentifier(string lex)
         {
             // Check if the lex is an identifier or not.
@@ -316,9 +316,9 @@ namespace TINY_Compiler
             // Check if the lex is a number or not.
             bool isValid = true;
             Regex regexNumber = new Regex(@"^[0-9]+(\.[0-9]+)?$", RegexOptions.Compiled);
-            if(!regexNumber.IsMatch(lex))
+            if (!regexNumber.IsMatch(lex))
             {
-                isValid= false;
+                isValid = false;
             }
             return isValid;
         }
@@ -326,9 +326,9 @@ namespace TINY_Compiler
         bool isFloat(string lex)
         {
             // Check if the lex is a float or not.
-            bool isValid = true; 
+            bool isValid = true;
             Regex regexFloat = new Regex(@"^[0-9]+(\.[0-9]+)$", RegexOptions.Compiled);
-            if(!regexFloat.IsMatch(lex))
+            if (!regexFloat.IsMatch(lex))
             {
                 isValid = false;
             }
