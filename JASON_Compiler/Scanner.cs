@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 public enum Token_Class
 {
-    Else_KW, ElseIf_KW, Endl_KW, If_KW, Integer_KW, Float_KW, String_KW, Read_KW, Then_KW, Write_KW, Repeat_KW, Until_KW, Return_KW, Main_KW, End_KW,
-    AndOp, OrOp, Dot, Semicolon, Comma, LParanthesis, RParanthesis, LCurlBracket, RCurlBracket, EqualOp, LessThanOp,
-    GreaterThanOp, NotEqualOp, PlusOp, MinusOp, MultiplyOp, DivideOp, AssignmentOp,
-    Idenifier, Number, String, Float, Comment
+    T_Else, T_ElseIf, T_Endl, T_If, T_Integer, T_Float, T_String, T_Read, T_Then, T_Write, T_Repeat, T_Until, T_Return, T_Main, T_End,
+    T_AndOp, T_OrOp, T_Dot, T_Semicolon, T_Comma, T_LParanthesis, T_RParanthesis, T_LCurlBracket, T_RCurlBracket, T_EqualOp, T_LessThanOp,
+    T_GreaterThanOp, T_NotEqualOp, T_PlusOp, T_MinusOp, T_MultiplyOp, T_DivideOp, T_AssignmentOp,
+    T_Idenifier, T_Number, T_String_Literal, T_Float_Literal, T_Comment
 }
 namespace TINY_Compiler
 {
@@ -28,40 +28,40 @@ namespace TINY_Compiler
 
         public Scanner()
         {
-            ReservedWords.Add("if", Token_Class.If_KW);
-            ReservedWords.Add("elseif", Token_Class.ElseIf_KW);
-            ReservedWords.Add("else", Token_Class.Else_KW);
-            ReservedWords.Add("int", Token_Class.Integer_KW);
-            ReservedWords.Add("float", Token_Class.Float_KW);
-            ReservedWords.Add("string", Token_Class.String_KW);
-            ReservedWords.Add("read", Token_Class.Read_KW);
-            ReservedWords.Add("write", Token_Class.Write_KW);
-            ReservedWords.Add("repeat", Token_Class.Repeat_KW);
-            ReservedWords.Add("until", Token_Class.Until_KW);
-            ReservedWords.Add("then", Token_Class.Then_KW);
-            ReservedWords.Add("return", Token_Class.Return_KW);
-            ReservedWords.Add("endl", Token_Class.Endl_KW);
-            ReservedWords.Add("main", Token_Class.Main_KW);
-            ReservedWords.Add("end", Token_Class.End_KW);
+            ReservedWords.Add("if", Token_Class.T_If);
+            ReservedWords.Add("elseif", Token_Class.T_ElseIf);
+            ReservedWords.Add("else", Token_Class.T_Else);
+            ReservedWords.Add("int", Token_Class.T_Integer);
+            ReservedWords.Add("float", Token_Class.T_Float);
+            ReservedWords.Add("string", Token_Class.T_String);
+            ReservedWords.Add("read", Token_Class.T_Read);
+            ReservedWords.Add("write", Token_Class.T_Write);
+            ReservedWords.Add("repeat", Token_Class.T_Repeat);
+            ReservedWords.Add("until", Token_Class.T_Until);
+            ReservedWords.Add("then", Token_Class.T_Then);
+            ReservedWords.Add("return", Token_Class.T_Return);
+            ReservedWords.Add("endl", Token_Class.T_Endl);
+            ReservedWords.Add("main", Token_Class.T_Main);
+            ReservedWords.Add("end", Token_Class.T_End);
 
-            Operators.Add(".", Token_Class.Dot);
-            Operators.Add(";", Token_Class.Semicolon);
-            Operators.Add("{", Token_Class.LCurlBracket);
-            Operators.Add("}", Token_Class.RCurlBracket);
-            Operators.Add(",", Token_Class.Comma);
-            Operators.Add("(", Token_Class.LParanthesis);
-            Operators.Add(")", Token_Class.RParanthesis);
-            Operators.Add("=", Token_Class.EqualOp);
-            Operators.Add(":=", Token_Class.AssignmentOp);
-            Operators.Add("<", Token_Class.LessThanOp);
-            Operators.Add(">", Token_Class.GreaterThanOp);
-            Operators.Add("<>", Token_Class.NotEqualOp);
-            Operators.Add("+", Token_Class.PlusOp);
-            Operators.Add("-", Token_Class.MinusOp);
-            Operators.Add("*", Token_Class.MultiplyOp);
-            Operators.Add("/", Token_Class.DivideOp);
-            Operators.Add("&&", Token_Class.AndOp);
-            Operators.Add("||", Token_Class.OrOp);
+            Operators.Add(".", Token_Class.T_Dot);
+            Operators.Add(";", Token_Class.T_Semicolon);
+            Operators.Add("{", Token_Class.T_LCurlBracket);
+            Operators.Add("}", Token_Class.T_RCurlBracket);
+            Operators.Add(",", Token_Class.T_Comma);
+            Operators.Add("(", Token_Class.T_LParanthesis);
+            Operators.Add(")", Token_Class.T_RParanthesis);
+            Operators.Add("=", Token_Class.T_EqualOp);
+            Operators.Add(":=", Token_Class.T_AssignmentOp);
+            Operators.Add("<", Token_Class.T_LessThanOp);
+            Operators.Add(">", Token_Class.T_GreaterThanOp);
+            Operators.Add("<>", Token_Class.T_NotEqualOp);
+            Operators.Add("+", Token_Class.T_PlusOp);
+            Operators.Add("-", Token_Class.T_MinusOp);
+            Operators.Add("*", Token_Class.T_MultiplyOp);
+            Operators.Add("/", Token_Class.T_DivideOp);
+            Operators.Add("&&", Token_Class.T_AndOp);
+            Operators.Add("||", Token_Class.T_OrOp);
         }
 
         public void StartScanning(string SourceCode)
@@ -256,7 +256,7 @@ namespace TINY_Compiler
             //Is it an identifier?
             else if (isIdentifier(Lex))
             {
-                Tok.token_type = Token_Class.Idenifier;
+                Tok.token_type = Token_Class.T_Idenifier;
                 Tokens.Add(Tok);
             }
 
@@ -271,21 +271,21 @@ namespace TINY_Compiler
             //Is it an float?
             else if (isFloat(Lex))
             {
-                Tok.token_type = Token_Class.Float;
+                Tok.token_type = Token_Class.T_Float_Literal;
                 Tokens.Add(Tok);
             }
 
             //Is it an number?
             else if (isNumber(Lex))
             {
-                Tok.token_type = Token_Class.Number;
+                Tok.token_type = Token_Class.T_Number;
                 Tokens.Add(Tok);
             }
 
             //Is it a string?
             else if (isString(Lex))
             {
-                Tok.token_type = Token_Class.String;
+                Tok.token_type = Token_Class.T_String_Literal;
                 Tokens.Add(Tok);
             }
 
