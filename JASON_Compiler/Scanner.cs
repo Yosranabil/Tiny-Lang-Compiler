@@ -10,7 +10,7 @@ public enum Token_Class
     T_Else, T_ElseIf, T_Endl, T_If, T_Integer, T_Float, T_String, T_Read, T_Then, T_Write, T_Repeat, T_Until, T_Return, T_Main, T_End,
     T_AndOp, T_OrOp, T_Dot, T_Semicolon, T_Comma, T_LParanthesis, T_RParanthesis, T_LCurlBracket, T_RCurlBracket, T_EqualOp, T_LessThanOp,
     T_GreaterThanOp, T_NotEqualOp, T_PlusOp, T_MinusOp, T_MultiplyOp, T_DivideOp, T_AssignmentOp,
-    T_Idenifier, T_Number, T_String_Literal, T_Float_Literal, T_Comment
+    T_Idenifier, T_Number, T_String_Literal, T_Float_Literal
 }
 namespace TINY_Compiler
 {
@@ -92,10 +92,10 @@ namespace TINY_Compiler
                         }
                         else
                         {
-                            i = j - 1;
                             break;
                         }
                     }
+                    i = j - 1;
                     FindTokenClass(CurrentLexeme);
                 }
 
@@ -113,16 +113,17 @@ namespace TINY_Compiler
                         }
                         else
                         {
-                            i = j - 1; break;
+                            break;
                         }
                     }
+                    i = j - 1; 
                     FindTokenClass(CurrentLexeme);
                 }
 
                 //---------------------------------------------------------------------------------------------------------------//
                 /////////////////////////////////////////////// For Comments /////////////////////////////////////////////////////
                 //--------------------------------------------------------------------------------------------------------------//
-                else if (CurrentChar == '/' && SourceCode[j + 1] == '*')//if you read a comment
+                else if (CurrentChar == '/' && j + 1 < SourceCode.Length && SourceCode[j + 1] == '*')//if you read a comment
                 {
                     bool isValidComment = true;
 
@@ -131,9 +132,8 @@ namespace TINY_Compiler
                         CurrentChar = SourceCode[j];
                         CurrentLexeme += CurrentChar.ToString();
 
-                        if (CurrentChar == '/')
+                        if (CurrentChar == '/' && SourceCode[j - 1] == '*')
                         {
-
                             break;
                         }
                     }
@@ -148,45 +148,44 @@ namespace TINY_Compiler
                     }
                     else
                     {
-                        Errors.Error_List.Add($"Wrong Comment Format in {CurrentLexeme}");                      
+                        Errors.Error_List.Add($"Unterminated Comment {CurrentLexeme}");                   
                     }
                 }
                 //---------------------------------------------------------------------------------------------------------------//
                 /////////////////////////////////////////////// For Operators /////////////////////////////////////////////////////
                 //--------------------------------------------------------------------------------------------------------------//
-                else if (CurrentChar == '&' || CurrentChar == '|')//if you read boolean operators
+                else if (CurrentChar == '&')//if you read a && operator
                 {
-                    for (j = i + 1; j < SourceCode.Length; j++)
+                    if (j + 1 < SourceCode.Length && SourceCode[j + 1] == '&')
                     {
-                        CurrentChar = SourceCode[j];
-                        CurrentLexeme += CurrentChar.ToString();
-
-                        if ((CurrentLexeme == "&&" && SourceCode[j + 1] != '&') || (CurrentLexeme == "||" && SourceCode[j + 1] != '|'))
-                        {
-                            FindTokenClass(CurrentLexeme);
-                            break;
-                        }
+                        CurrentLexeme += SourceCode[j + 1];
+                        i = j + 1;
                     }
-                    i = j;
+                    FindTokenClass(CurrentLexeme);
+                }
+                else if (CurrentChar == '|')//if you read a || operator
+                {
+                    if (j + 1 < SourceCode.Length && SourceCode[j + 1] == '|')
+                    {
+                        CurrentLexeme += SourceCode[j + 1];
+                        i = j + 1;
+                    }
+
+                    FindTokenClass(CurrentLexeme);
                 }
                 else if (CurrentChar == ':')//if you read an assign operator
                 {
-                    for (j = i + 1; j < SourceCode.Length; j++)
+                    if (j + 1 < SourceCode.Length && SourceCode[j + 1] == '=')
                     {
-                        CurrentChar = SourceCode[j];
-                        CurrentLexeme += CurrentChar.ToString();
-
-                        if (CurrentChar == '=')
-                        {
-                            FindTokenClass(CurrentLexeme);
-                            break;
-                        }
+                        CurrentLexeme += SourceCode[j + 1];
+                        i = j + 1;
                     }
-                    i = j + 1;
+
+                    FindTokenClass(CurrentLexeme);
                 }
                 else if (CurrentChar == '<') // if you read <>, < operators
                 {
-                    if (SourceCode[j + 1] == '>')
+                    if (j + 1 < SourceCode.Length && SourceCode[j + 1] == '>')
                     {
                         CurrentLexeme += SourceCode[j + 1];
                         i = j + 1;
@@ -236,11 +235,13 @@ namespace TINY_Compiler
 
             TINY_Compiler.TokenStream = Tokens;
         }
+
         void FindTokenClass(string Lex)
         {
             Token Tok = new Token();
             Tok.lex = Lex;
 
+            //Is it a Null or Blank Space?
             if (string.IsNullOrWhiteSpace(Lex))
             {
                 return;
