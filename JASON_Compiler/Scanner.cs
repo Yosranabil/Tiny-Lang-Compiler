@@ -66,7 +66,6 @@ namespace TINY_Compiler
 
         public void StartScanning(string SourceCode)
         {
-            bool expectingSemicolon = false;
 
             for (int i = 0; i < SourceCode.Length; i++)
             {
@@ -77,6 +76,9 @@ namespace TINY_Compiler
                 if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n')
                     continue;
 
+                //---------------------------------------------------------------------------------------------------------------//
+                ///////////////////////////////////// For Reserved Words & Identifiers ///////////////////////////////////////////
+                //--------------------------------------------------------------------------------------------------------------//
                 if (CurrentChar >= 'A' && CurrentChar <= 'Z' || CurrentChar >= 'a' && CurrentChar <= 'z') //if you read a character
                 {
 
@@ -97,23 +99,29 @@ namespace TINY_Compiler
                     FindTokenClass(CurrentLexeme);
                 }
 
-
+                //---------------------------------------------------------------------------------------------------------------//
+                /////////////////////////////////////// For Numbers(Integers & Float) ////////////////////////////////////////////
+                //--------------------------------------------------------------------------------------------------------------//
                 else if (CurrentChar >= '0' && CurrentChar <= '9')//if you read a number
                 {
                     for (j = i + 1; j < SourceCode.Length; j++)
                     {
                         CurrentChar = SourceCode[j];
-                        if (CurrentChar == '=' || CurrentChar == '+' || CurrentChar == '-' || CurrentChar == '/' ||
-                            CurrentChar == '*' || CurrentChar == '<' || CurrentChar == '>' || CurrentChar == '&' ||
-                            CurrentChar == ':' || CurrentChar == ';' || CurrentChar == ',' || CurrentChar == ')' ||
-                            CurrentChar == ' ' || CurrentChar == '\n' || CurrentChar == '\r')
+                        if((CurrentChar >= '0' && CurrentChar <= '9') || CurrentChar == '.')
+                        {
+                            CurrentLexeme += CurrentChar.ToString();
+                        }
+                        else
                         {
                             i = j - 1; break;
                         }
-                        CurrentLexeme += CurrentChar.ToString();
                     }
                     FindTokenClass(CurrentLexeme);
                 }
+
+                //---------------------------------------------------------------------------------------------------------------//
+                /////////////////////////////////////////////// For Comments /////////////////////////////////////////////////////
+                //--------------------------------------------------------------------------------------------------------------//
                 else if (CurrentChar == '/' && SourceCode[j + 1] == '*')//if you read a comment
                 {
                     bool isValidComment = true;
@@ -140,10 +148,13 @@ namespace TINY_Compiler
                     }
                     else
                     {
-                        Errors.Error_List.Add($"Wrong Comment Format in {CurrentLexeme}");
+                        Errors.Error_List.Add($"Wrong Comment Format in {CurrentLexeme}");                      
                     }
                 }
-                else if (CurrentChar == '&' || CurrentChar == '|')//if you read a boolean operator
+                //---------------------------------------------------------------------------------------------------------------//
+                /////////////////////////////////////////////// For Operators /////////////////////////////////////////////////////
+                //--------------------------------------------------------------------------------------------------------------//
+                else if (CurrentChar == '&' || CurrentChar == '|')//if you read boolean operators
                 {
                     for (j = i + 1; j < SourceCode.Length; j++)
                     {
@@ -173,6 +184,20 @@ namespace TINY_Compiler
                     }
                     i = j + 1;
                 }
+                else if (CurrentChar == '<') // if you read <>, < operators
+                {
+                    if (SourceCode[j + 1] == '>')
+                    {
+                        CurrentLexeme += SourceCode[j + 1];
+                        i = j + 1;
+                    }
+
+                    FindTokenClass(CurrentLexeme);
+                }
+
+                //---------------------------------------------------------------------------------------------------------------//
+                /////////////////////////////////////////////// For Strings ///////////////////////////////////////////////////////
+                //--------------------------------------------------------------------------------------------------------------//
                 else if (CurrentChar == '\"')//if you read a string
                 {
                     bool isValidString = true;
@@ -202,34 +227,6 @@ namespace TINY_Compiler
                     {
                         Errors.Error_List.Add($"Wrong string Format in {CurrentLexeme}");
                     }
-                }
-                else if (CurrentChar == '.')//if you read float
-                {
-                    for (j = i + 1; j < SourceCode.Length; j++)
-                    {
-                        CurrentChar = SourceCode[j];
-                        CurrentLexeme += CurrentChar.ToString();
-
-                        if ((CurrentChar >= '0' && CurrentChar <= '9'))
-                        {
-                            CurrentLexeme += CurrentChar.ToString();
-                        }
-                        else
-                        {
-                            i = j - 1; break;
-                        }
-                    }
-                    FindTokenClass(CurrentLexeme);
-                }
-                else if (CurrentChar == '<') // if you read <>, < operators
-                {
-                    if (SourceCode[j + 1] == '>')
-                    {
-                        CurrentLexeme += SourceCode[j + 1];
-                        i = j + 1;
-                    }
-
-                    FindTokenClass(CurrentLexeme);
                 }
                 else
                 {
@@ -311,6 +308,7 @@ namespace TINY_Compiler
             }
             return isValid;
         }
+
         bool isNumber(string lex)
         {
             // Check if the lex is a number or not.
