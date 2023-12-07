@@ -56,6 +56,7 @@ namespace TINY_Compiler
 
         private void button2_Click(object sender, EventArgs e)
         {
+            textBox2.Text = "";
             dataGridView1.Rows.Clear();
             TINY_Compiler.TokenStream.Clear();
         }

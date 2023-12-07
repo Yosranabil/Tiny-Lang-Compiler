@@ -8,12 +8,15 @@ using System.Threading.Tasks;
 public enum Token_Class
 {
     T_Else, T_ElseIf, T_Endl, T_If, T_Integer, T_Float, T_String, T_Read, T_Then, T_Write, T_Repeat, T_Until, T_Return, T_Main, T_End,
-    T_AndOp, T_OrOp, T_Dot, T_Semicolon, T_Comma, T_LParanthesis, T_RParanthesis, T_LCurlBracket, T_RCurlBracket, T_EqualOp, T_LessThanOp,
+    T_AndOp, T_OrOp, T_Semicolon, T_Comma, T_LParanthesis, T_RParanthesis, T_LCurlBracket, T_RCurlBracket, T_EqualOp, T_LessThanOp,
     T_GreaterThanOp, T_NotEqualOp, T_PlusOp, T_MinusOp, T_MultiplyOp, T_DivideOp, T_AssignmentOp,
     T_Idenifier, T_Number, T_String_Literal, T_Float_Literal
 }
 namespace TINY_Compiler
 {
+    /// <summary>
+    /// ///// terminate when the string is not open at endline
+    /// </summary>
     public class Token
     {
         public string lex;
@@ -44,7 +47,6 @@ namespace TINY_Compiler
             ReservedWords.Add("main", Token_Class.T_Main);
             ReservedWords.Add("end", Token_Class.T_End);
 
-            Operators.Add(".", Token_Class.T_Dot);
             Operators.Add(";", Token_Class.T_Semicolon);
             Operators.Add("{", Token_Class.T_LCurlBracket);
             Operators.Add("}", Token_Class.T_RCurlBracket);
@@ -66,7 +68,7 @@ namespace TINY_Compiler
 
         public void StartScanning(string SourceCode)
         {
-
+            Errors.Error_List.Clear();
             for (int i = 0; i < SourceCode.Length; i++)
             {
                 int j = i;
@@ -139,7 +141,7 @@ namespace TINY_Compiler
                     }
                     if (j == SourceCode.Length)
                     {
-                        isValidComment = false;
+                        isValidComment = false;                       
                     }
 
                     if (isValidComment)
@@ -148,7 +150,8 @@ namespace TINY_Compiler
                     }
                     else
                     {
-                        Errors.Error_List.Add($"Unterminated Comment {CurrentLexeme}");                   
+                        Errors.Error_List.Add($"Unterminated Comment {CurrentLexeme}");
+                        return;
                     }
                 }
                 //---------------------------------------------------------------------------------------------------------------//
@@ -197,7 +200,7 @@ namespace TINY_Compiler
                 //---------------------------------------------------------------------------------------------------------------//
                 /////////////////////////////////////////////// For Strings ///////////////////////////////////////////////////////
                 //--------------------------------------------------------------------------------------------------------------//
-                else if (CurrentChar == '\"')//if you read a string
+                else if (CurrentChar == '\"') // if you read a string
                 {
                     bool isValidString = true;
 
@@ -208,25 +211,30 @@ namespace TINY_Compiler
 
                         if (CurrentChar == '\"')
                         {
+                            isValidString = true;
+                            break;
+                        }
 
+                        // Check if we reached the end of the line
+                        if (CurrentChar == '\n' || CurrentChar == '\r')
+                        {
+                            isValidString = false;
                             break;
                         }
                     }
-                    if (j == SourceCode.Length)
-                    {
-                        isValidString = false;
-                    }
 
-                    if (isValidString)
+                    if (!isValidString)
                     {
-                        FindTokenClass(CurrentLexeme);
-                        i = j + 1;
+                        Errors.Error_List.Add($"Wrong string format in {CurrentLexeme}. Missing closing double quote.");
                     }
                     else
                     {
-                        Errors.Error_List.Add($"Wrong string Format in {CurrentLexeme}");
+                        FindTokenClass(CurrentLexeme);
                     }
+
+                    i = j + 1;
                 }
+
                 else
                 {
                     FindTokenClass(CurrentChar.ToString());
