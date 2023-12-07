@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JASON_Compiler;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,9 +15,6 @@ public enum Token_Class
 }
 namespace TINY_Compiler
 {
-    /// <summary>
-    /// ///// terminate when the string is not open at endline
-    /// </summary>
     public class Token
     {
         public string lex;
@@ -109,7 +107,7 @@ namespace TINY_Compiler
                     for (j = i + 1; j < SourceCode.Length; j++)
                     {
                         CurrentChar = SourceCode[j];
-                        if((CurrentChar >= '0' && CurrentChar <= '9') || CurrentChar == '.')
+                        if ((CurrentChar >= '0' && CurrentChar <= '9') || CurrentChar == '.')
                         {
                             CurrentLexeme += CurrentChar.ToString();
                         }
@@ -118,7 +116,7 @@ namespace TINY_Compiler
                             break;
                         }
                     }
-                    i = j - 1; 
+                    i = j - 1;
                     FindTokenClass(CurrentLexeme);
                 }
 
@@ -141,7 +139,7 @@ namespace TINY_Compiler
                     }
                     if (j == SourceCode.Length)
                     {
-                        isValidComment = false;                       
+                        isValidComment = false;
                     }
 
                     if (isValidComment)
