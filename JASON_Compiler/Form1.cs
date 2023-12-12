@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace JASON_Compiler
+namespace TINY_Compiler
 {
     public partial class Form1 : Form
     {
@@ -21,16 +21,16 @@ namespace JASON_Compiler
         {
             textBox2.Clear();
             string Code=textBox1.Text.ToLower();
-            JASON_Compiler.Start_Compiling(Code);
+            TINY_Compiler.Start_Compiling(Code);
             PrintTokens();
-            treeView1.Nodes.Add(Parser.PrintParseTree(JASON_Compiler.treeroot));
+            treeView1.Nodes.Add(Parser.PrintParseTree(TINY_Compiler.treeroot));
             PrintErrors();
         }
         void PrintTokens()
         {
-            for (int i = 0; i < JASON_Compiler.Jason_Scanner.Tokens.Count; i++)
+            for (int i = 0; i < TINY_Compiler.Tiny_Scanner.Tokens.Count; i++)
             {
-               dataGridView1.Rows.Add(JASON_Compiler.Jason_Scanner.Tokens.ElementAt(i).lex, JASON_Compiler.Jason_Scanner.Tokens.ElementAt(i).token_type);
+               dataGridView1.Rows.Add(TINY_Compiler.Tiny_Scanner.Tokens.ElementAt(i).lex, TINY_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type);
             }
         }
 
@@ -50,7 +50,7 @@ namespace JASON_Compiler
         {
             textBox1.Text = "";
             textBox2.Text = "";
-            JASON_Compiler.TokenStream.Clear();
+            TINY_Compiler.TokenStream.Clear();
             dataGridView1.Rows.Clear();
             treeView1.Nodes.Clear();
             Errors.Error_List.Clear();

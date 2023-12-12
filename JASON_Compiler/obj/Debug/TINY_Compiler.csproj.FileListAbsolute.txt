@@ -1,0 +1,12 @@
+C:\Users\Dell\yosra\Third Year\Compiler\Project Code\Compiler Project Phase 2\Tiny-Lang-Compiler\JASON_Compiler\obj\Debug\TINY_Compiler.csproj.AssemblyReference.cache
+C:\Users\Dell\yosra\Third Year\Compiler\Project Code\Compiler Project Phase 2\Tiny-Lang-Compiler\JASON_Compiler\obj\Debug\TINY_Compiler.csproj.SuggestedBindingRedirects.cache
+C:\Users\Dell\yosra\Third Year\Compiler\Project Code\Compiler Project Phase 2\Tiny-Lang-Compiler\JASON_Compiler\obj\Debug\JASON_Compiler.Form2.resources
+C:\Users\Dell\yosra\Third Year\Compiler\Project Code\Compiler Project Phase 2\Tiny-Lang-Compiler\JASON_Compiler\obj\Debug\JASON_Compiler.Properties.Resources.resources
+C:\Users\Dell\yosra\Third Year\Compiler\Project Code\Compiler Project Phase 2\Tiny-Lang-Compiler\JASON_Compiler\obj\Debug\TINY_Compiler.csproj.GenerateResource.cache
+C:\Users\Dell\yosra\Third Year\Compiler\Project Code\Compiler Project Phase 2\Tiny-Lang-Compiler\JASON_Compiler\obj\Debug\TINY_Compiler.csproj.CoreCompileInputs.cache
+C:\Users\Dell\yosra\Third Year\Compiler\Project Code\Compiler Project Phase 2\Tiny-Lang-Compiler\JASON_Compiler\obj\Debug\JASON_Compiler.exe
+C:\Users\Dell\yosra\Third Year\Compiler\Project Code\Compiler Project Phase 2\Tiny-Lang-Compiler\JASON_Compiler\obj\Debug\JASON_Compiler.pdb
+C:\Users\Dell\yosra\Third Year\Compiler\Project Code\Compiler Project Phase 2\Tiny-Lang-Compiler\JASON_Compiler\obj\Debug\TINY_Compiler.Form1.resources
+C:\Users\Dell\yosra\Third Year\Compiler\Project Code\Compiler Project Phase 2\Tiny-Lang-Compiler\JASON_Compiler\bin\Debug\JASON_Compiler.exe.config
+C:\Users\Dell\yosra\Third Year\Compiler\Project Code\Compiler Project Phase 2\Tiny-Lang-Compiler\JASON_Compiler\bin\Debug\JASON_Compiler.exe
+C:\Users\Dell\yosra\Third Year\Compiler\Project Code\Compiler Project Phase 2\Tiny-Lang-Compiler\JASON_Compiler\bin\Debug\JASON_Compiler.pdb

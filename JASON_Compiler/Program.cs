@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace JASON_Compiler
+namespace TINY_Compiler
 {
     static class Program
     {
