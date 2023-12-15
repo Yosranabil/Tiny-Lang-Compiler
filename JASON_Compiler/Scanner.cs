@@ -230,7 +230,7 @@ namespace TINY_Compiler
                         FindTokenClass(CurrentLexeme);
                     }
 
-                    i = j + 1;
+                    i = j;
                 }
 
                 else

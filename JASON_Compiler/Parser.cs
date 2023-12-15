@@ -32,6 +32,33 @@ namespace TINY_Compiler
             return root;
         }
 
+
+/*        int FOO1 (int x)
+        {
+            y:=y*5;
+            return y;
+        }
+        float foo2( float c)
+        {
+            return c/2;
+        }
+        int main()
+        {
+            int x;
+            write "Please enter number";
+            read x;
+            float y;
+            y:=4.9 ;
+            if x<> 0 then
+            x:=(x*Foo1(x))/4; -----------------------> Doesn't recognize function calls
+            elseif x<0 then
+            write x+foo2(y)*4;
+            else
+            write "x is equal 0";
+            end
+            return 0;
+        }
+*/
         Node Program()
         {
             Node program = new Node("Program");
@@ -58,7 +85,7 @@ namespace TINY_Compiler
                 main_function.Children.Add(match(Token_Class.T_RParanthesis));
                 main_function.Children.Add(Function_Body());
             }
-
+            
             return main_function;
         }
 
@@ -127,7 +154,7 @@ namespace TINY_Compiler
             {
                 function_statments_dash.Children.Add(Function_Statement());
                 function_statments_dash.Children.Add(Function_Statements_Dash());
-                Function_Statements_Dash();                                          // <--------------
+                //Function_Statements_Dash();                                          // <--------------
                 return function_statments_dash;
             }
 
@@ -177,10 +204,10 @@ namespace TINY_Compiler
             {
                 function_call.Children.Add(match(Token_Class.T_Identifier));
                 function_call.Children.Add(match(Token_Class.T_LParanthesis));
-                if (token_class_type == Token_Class.T_Comma)
+                if (TokenStream[InputPointer].token_type == Token_Class.T_Identifier)
                 {
                     function_call.Children.Add(Identifier_List());
-                }
+                }             
                 function_call.Children.Add(match(Token_Class.T_RParanthesis));
             }
 
@@ -198,13 +225,13 @@ namespace TINY_Compiler
             {
                 expression.Children.Add(match(Token_Class.T_String_Literal));
             }
-            else if(token_class_type == Token_Class.T_Number || (token_class_type == Token_Class.T_Identifier && token_class_next_type == Token_Class.T_LParanthesis) || token_class_type == Token_Class.T_Identifier)
-            {
-                expression.Children.Add(Term());
-            }
-            else if(token_class_type == Token_Class.T_LParanthesis || token_class_type == Token_Class.T_Number || (token_class_type == Token_Class.T_Identifier && token_class_next_type == Token_Class.T_LParanthesis) || token_class_type == Token_Class.T_Identifier)
+            else if(token_class_type == Token_Class.T_LParanthesis || token_class_type == Token_Class.T_Float_Literal || token_class_type == Token_Class.T_Number || (token_class_type == Token_Class.T_Identifier && token_class_next_type == Token_Class.T_LParanthesis) || token_class_type == Token_Class.T_Identifier)
             {
                 expression.Children.Add(Equation());
+            }
+            else if(token_class_type == Token_Class.T_Number || token_class_type == Token_Class.T_Float_Literal || (token_class_type == Token_Class.T_Identifier && token_class_next_type == Token_Class.T_LParanthesis) || token_class_type == Token_Class.T_Identifier)
+            {
+                expression.Children.Add(Term());
             }
 
             return expression;
@@ -221,13 +248,17 @@ namespace TINY_Compiler
             {
                 term.Children.Add(match(Token_Class.T_Number));
             }
-            else if(token_class_type == Token_Class.T_Identifier)
+            else if(token_class_type == Token_Class.T_Float_Literal)
             {
-                term.Children.Add(match(Token_Class.T_Identifier));
+                term.Children.Add(match(Token_Class.T_Float_Literal));
             }
             else if(token_class_type == Token_Class.T_Identifier && token_class_next_type == Token_Class.T_LParanthesis)
             {
                 term.Children.Add(Function_Call());
+            }
+            else if(token_class_type == Token_Class.T_Identifier)
+            {
+                term.Children.Add(match(Token_Class.T_Identifier));
             }
 
             return term;
@@ -510,7 +541,11 @@ namespace TINY_Compiler
             Token_Class token_class_next_type = TokenStream[InputPointer + 1].token_type;
 
             // check the write statement dash structure
-            if (token_class_type == Token_Class.T_LParanthesis || token_class_type == Token_Class.T_Number || (token_class_type == Token_Class.T_Identifier && token_class_next_type == Token_Class.T_LParanthesis) || token_class_type == Token_Class.T_Identifier)
+            if (token_class_type == Token_Class.T_String_Literal || 
+                token_class_type == Token_Class.T_LParanthesis || 
+                token_class_type == Token_Class.T_Number || token_class_type == Token_Class.T_Float_Literal ||
+                (token_class_type == Token_Class.T_Identifier && token_class_next_type == Token_Class.T_LParanthesis) ||
+                token_class_type == Token_Class.T_Identifier)
             {
                 write_statement_dash.Children.Add(Expression());
                 write_statement_dash.Children.Add(match(Token_Class.T_Semicolon));
@@ -593,7 +628,7 @@ namespace TINY_Compiler
                 condition_statement_dash.Children.Add(BooleanOps());
                 condition_statement_dash.Children.Add(Condition());
                 condition_statement_dash.Children.Add(Condition_Statement_Dash());
-                Condition_Statement_Dash();                      // <-------------------
+                //Condition_Statement_Dash();                      // <-------------------
 
                 return condition_statement_dash;
             }
@@ -625,7 +660,7 @@ namespace TINY_Compiler
             {
                 equation.Children.Add(match(Token_Class.T_LParanthesis));
                 equation.Children.Add(Equation());
-                Equation();                                                              // <--------------
+                //Equation();                                                              // <--------------
                 equation.Children.Add(match(Token_Class.T_RParanthesis));
                 equation.Children.Add(Equation_Dash());
             }
@@ -648,7 +683,7 @@ namespace TINY_Compiler
                 equation_dash.Children.Add(ArithmeticOps());
                 equation_dash.Children.Add(Equation());
                 equation_dash.Children.Add(Equation_Dash());
-                Equation_Dash();                                                        // <--------------
+                //Equation_Dash();                                                        // <--------------
                 return equation_dash;
             }
 
@@ -736,7 +771,7 @@ namespace TINY_Compiler
                 parameters_dash.Children.Add(match(Token_Class.T_Comma));
                 parameters_dash.Children.Add(Parameter());
                 parameters_dash.Children.Add(Parameters_Dash());
-                Parameters_Dash();                                                // <--------------
+                //Parameters_Dash();                                                // <--------------
 
                 return parameters_dash;
             }
