@@ -454,11 +454,11 @@ namespace TINY_Compiler
             Token_Class token_class_next_type = TokenStream[InputPointer + 1].token_type;
 
             // check the statements structure
-            if (token_class_type == Token_Class.T_Read || token_class_type == Token_Class.T_Write ||
-                token_class_next_type == Token_Class.T_AssignmentOp || token_class_type == Token_Class.T_Integer ||
-                token_class_type == Token_Class.T_Float || token_class_type == Token_Class.T_String || 
-                token_class_type == Token_Class.T_If || token_class_type == Token_Class.T_Repeat || 
-                token_class_next_type == Token_Class.T_LParanthesis)
+            if (token_class_type == Token_Class.T_Read || token_class_type == Token_Class.T_Write || token_class_type == Token_Class.T_Repeat ||
+                token_class_next_type == Token_Class.T_AssignmentOp || 
+                token_class_type == Token_Class.T_Integer || token_class_type == Token_Class.T_Float || token_class_type == Token_Class.T_String || 
+                token_class_type == Token_Class.T_If || 
+                (token_class_type == Token_Class.T_Identifier && token_class_next_type == Token_Class.T_LParanthesis))
             {
                 statements.Children.Add(Statement());
                 statements.Children.Add(Statements_Dash());
@@ -469,16 +469,16 @@ namespace TINY_Compiler
 
         Node Statements_Dash()
         {
-            Node statements = new Node("Statements");
+            Node statements = new Node("StatementsDash");
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
             Token_Class token_class_next_type = TokenStream[InputPointer + 1].token_type;
 
             // check the statements dash structure
-            if (token_class_type == Token_Class.T_Read || token_class_type == Token_Class.T_Write ||
-                token_class_next_type == Token_Class.T_AssignmentOp || token_class_type == Token_Class.T_Integer ||
-                token_class_type == Token_Class.T_Float || token_class_type == Token_Class.T_String ||
-                token_class_type == Token_Class.T_If || token_class_type == Token_Class.T_Repeat ||
-                token_class_next_type == Token_Class.T_LParanthesis)
+            if (token_class_type == Token_Class.T_Read || token_class_type == Token_Class.T_Write || token_class_type == Token_Class.T_Repeat ||
+                token_class_next_type == Token_Class.T_AssignmentOp ||
+                token_class_type == Token_Class.T_Integer || token_class_type == Token_Class.T_Float || token_class_type == Token_Class.T_String ||
+                token_class_type == Token_Class.T_If ||
+                (token_class_type == Token_Class.T_Identifier && token_class_next_type == Token_Class.T_LParanthesis))
             {
                 statements.Children.Add(Statement());
                 statements.Children.Add(Statements_Dash());
@@ -506,9 +506,11 @@ namespace TINY_Compiler
         Node Write_Statement_Dash()
         {
             Node write_statement_dash = new Node("WriteStatementDash");
+            Token_Class token_class_type = TokenStream[InputPointer].token_type;
+            Token_Class token_class_next_type = TokenStream[InputPointer + 1].token_type;
 
             // check the write statement dash structure
-            if (TokenStream[InputPointer].token_type == Token_Class.T_Write)
+            if (token_class_type == Token_Class.T_LParanthesis || token_class_type == Token_Class.T_Number || (token_class_type == Token_Class.T_Identifier && token_class_next_type == Token_Class.T_LParanthesis) || token_class_type == Token_Class.T_Identifier)
             {
                 write_statement_dash.Children.Add(Expression());
                 write_statement_dash.Children.Add(match(Token_Class.T_Semicolon));
