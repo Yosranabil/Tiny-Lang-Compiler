@@ -5,4 +5,7 @@ This repository contains the source code and documentation for a compiler implem
 Compiler Theory course. The goal of this project is to demonstrate the understanding and application of compiler construction principles, including lexical analysis, parsing, semantic
 analysis.
 
+## Features
+* Lexical Analysis: Tokenizes the input source code into a stream of tokens.
+* Syntax Parsing: Parses the token stream to create an abstract syntax tree (AST).
 
