@@ -214,7 +214,7 @@ namespace TINY_Compiler
                         }
 
                         // Check if we reached the end of the line
-                        if (CurrentChar == '\n' || CurrentChar == '\r')
+                        else if (CurrentChar == '\n' || CurrentChar == '\r')
                         {
                             isValidString = false;
                             break;
@@ -224,6 +224,7 @@ namespace TINY_Compiler
                     if (!isValidString)
                     {
                         Errors.Error_List.Add($"Wrong string format in {CurrentLexeme}. Missing closing double quote.");
+                        return;
                     }
                     else
                     {
