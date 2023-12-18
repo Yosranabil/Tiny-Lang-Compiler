@@ -32,33 +32,6 @@ namespace TINY_Compiler
             return root;
         }
 
-
-/*        int FOO1 (int x)
-        {
-            y:=y*5;
-            return y;
-        }
-        float foo2( float c)
-        {
-            return c/2;
-        }
-        int main()
-        {
-            int x;
-            write "Please enter number";
-            read x;
-            float y;
-            y:=4.9 ;
-            if x<> 0 then
-            x:=(x*Foo1(x))/4; -----------------------> Doesn't recognize function calls
-            elseif x<0 then
-            write x+foo2(y)*4;
-            else
-            write "x is equal 0";
-            end
-            return 0;
-        }
-*/
         Node Program()
         {
             Node program = new Node("Program");
@@ -74,6 +47,7 @@ namespace TINY_Compiler
         Node Main_Function()
         {
             Node main_function = new Node("MainFunction");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -95,6 +69,7 @@ namespace TINY_Compiler
         Node Datatype()
         {
             Node datatype = new Node("Datatype");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -120,10 +95,9 @@ namespace TINY_Compiler
         Node Function_Statements()
         {
             Node function_statements = new Node("FunctionStatements");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
-
-
 
             // check the function statements sructure
             if (TokenStream[InputPointer].token_type == Token_Class.T_Integer || TokenStream[InputPointer].token_type == Token_Class.T_Float || TokenStream[InputPointer].token_type == Token_Class.T_String)
@@ -137,6 +111,7 @@ namespace TINY_Compiler
         Node Function_Statement()
         {
             Node function_statement = new Node("FunctionStatement");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -159,6 +134,7 @@ namespace TINY_Compiler
         Node Function_Statements_Dash()
         {
             Node function_statments_dash = new Node("FunctionStatementsDash");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -170,7 +146,7 @@ namespace TINY_Compiler
             {
                 function_statments_dash.Children.Add(Function_Statement());
                 function_statments_dash.Children.Add(Function_Statements_Dash());
-                //Function_Statements_Dash();                                          // <--------------
+
                 return function_statments_dash;
             }
 
@@ -219,6 +195,7 @@ namespace TINY_Compiler
         Node Function_Call()
         {
             Node function_call = new Node("FunctionCall");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -242,6 +219,7 @@ namespace TINY_Compiler
         Node Expression()
         {
             Node expression = new Node("Expression");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -299,9 +277,9 @@ namespace TINY_Compiler
         Node Identifier_List()
         {
             Node identifier_list = new Node("IdentifierList");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
-
 
             // check the identifier list structure
             if (TokenStream[InputPointer].token_type == Token_Class.T_Identifier)
@@ -315,9 +293,9 @@ namespace TINY_Compiler
         Node Identifier_List_Dash()
         {
             Node identifier_list_dash = new Node("IdentifierListDash");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
-
 
             // check the identifier list dash structure
             if (TokenStream[InputPointer].token_type == Token_Class.T_Comma)
@@ -370,6 +348,7 @@ namespace TINY_Compiler
         Node Statement()
         {
             Node statement = new Node("Statement");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -415,6 +394,7 @@ namespace TINY_Compiler
         Node Assignment_Statement()
         {
             Node assignment_statement = new Node("AssignmentStatement");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -435,6 +415,7 @@ namespace TINY_Compiler
         Node Declaration_Statement()
         {
             Node declaration_statement = new Node("DeclarationStatement");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -454,6 +435,7 @@ namespace TINY_Compiler
         Node If_Statement()
         {
             Node if_statement = new Node("IfStatement");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -481,6 +463,7 @@ namespace TINY_Compiler
 
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
+
             Token_Class token_Class = TokenStream[InputPointer].token_type;
 
             // check the else if statement structure
@@ -504,6 +487,7 @@ namespace TINY_Compiler
         Node Else_Statement()
         {
             Node else_statement = new Node("ElseStatement");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -526,6 +510,7 @@ namespace TINY_Compiler
         Node Repeat_Statement()
         {
             Node repeat_statement = new Node("RepeatStatement");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -546,6 +531,7 @@ namespace TINY_Compiler
         Node Statements()
         {
             Node statements = new Node("Statements");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -569,6 +555,7 @@ namespace TINY_Compiler
         Node Statements_Dash()
         {
             Node statements = new Node("StatementsDash");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -594,6 +581,7 @@ namespace TINY_Compiler
         Node Write_Statement()
         {
             Node write_statement = new Node("WriteStatement");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -639,6 +627,7 @@ namespace TINY_Compiler
         Node Read_Statement()
         {
             Node read_statement = new Node("ReadStatement");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -657,6 +646,7 @@ namespace TINY_Compiler
         Node Ret_Statement()
         {
             Node ret_statement = new Node("RetStatement");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -674,6 +664,7 @@ namespace TINY_Compiler
         Node Return_Statement()
         {
             Node return_statement = new Node("ReturnStatement");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -692,6 +683,7 @@ namespace TINY_Compiler
         Node Condition_Statement()
         {
             Node condition_statement = new Node("ConditionStatement");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -709,6 +701,7 @@ namespace TINY_Compiler
         Node Condition_Statement_Dash()
         {
             Node condition_statement_dash = new Node("ConditionStatementDash");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -720,7 +713,6 @@ namespace TINY_Compiler
                 condition_statement_dash.Children.Add(BooleanOps());
                 condition_statement_dash.Children.Add(Condition());
                 condition_statement_dash.Children.Add(Condition_Statement_Dash());
-                //Condition_Statement_Dash();                      // <-------------------
 
                 return condition_statement_dash;
             }
@@ -749,16 +741,16 @@ namespace TINY_Compiler
         Node Equation()
         {
             Node equation = new Node("Equation");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
-
 
             // check the equation structure
             if (TokenStream[InputPointer].token_type == Token_Class.T_LParanthesis)
             {
                 equation.Children.Add(match(Token_Class.T_LParanthesis));
                 equation.Children.Add(Equation());
-                //Equation();                                                              // <--------------
+
                 equation.Children.Add(match(Token_Class.T_RParanthesis));
                 equation.Children.Add(Equation_Dash());
             }
@@ -784,7 +776,7 @@ namespace TINY_Compiler
                 equation_dash.Children.Add(ArithmeticOps());
                 equation_dash.Children.Add(Equation());
                 equation_dash.Children.Add(Equation_Dash());
-                //Equation_Dash();                                                        // <--------------
+
                 return equation_dash;
             }
 
@@ -793,6 +785,7 @@ namespace TINY_Compiler
         Node ArithmeticOps()
         {
             Node arithmetic_ops = new Node("ArithmeticOps");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -810,6 +803,7 @@ namespace TINY_Compiler
         Node ConditionOps()
         {
             Node condition_ops = new Node("ConditionOps");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -827,6 +821,7 @@ namespace TINY_Compiler
         Node BooleanOps()
         {
             Node boolean_ops = new Node("BooleanOps");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -844,6 +839,7 @@ namespace TINY_Compiler
         Node Parameter()
         {
             Node parameter = new Node("Parameter");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -863,6 +859,7 @@ namespace TINY_Compiler
         Node Parameters()
         {
             Node parameters = new Node("Parameters");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -880,6 +877,7 @@ namespace TINY_Compiler
         Node Parameters_Dash()
         {
             Node parameters_dash = new Node("ParametersDash");
+
             if (!(InputPointer < TokenStream.Count - 1))
                 return null;
 
@@ -890,7 +888,6 @@ namespace TINY_Compiler
                 parameters_dash.Children.Add(match(Token_Class.T_Comma));
                 parameters_dash.Children.Add(Parameter());
                 parameters_dash.Children.Add(Parameters_Dash());
-                //Parameters_Dash();                                                // <--------------
 
                 return parameters_dash;
             }
