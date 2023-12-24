@@ -36,19 +36,38 @@ namespace TINY_Compiler
         {
             Node program = new Node("Program");
 
-            program.Children.Add(Function_Statements());
-            program.Children.Add(Main_Function());
+            if (InputPointer >= TokenStream.Count)
+            {
+                Errors.Error_List.Add("Parsing Error: Empty program.");
+                return null;
+            }
 
-            MessageBox.Show("Success");
+            Token_Class token_class_type = TokenStream[InputPointer].token_type;
+            Token_Class token_class_next_type = TokenStream[InputPointer + 1].token_type;
 
-            return program;
+            if((token_class_type != Token_Class.T_Identifier && token_class_next_type != Token_Class.T_Main) ||
+                token_class_type != Token_Class.T_Integer || token_class_type != Token_Class.T_Float || token_class_type != Token_Class.T_String)
+            {
+                Errors.Error_List.Add("Parsing Error: Program must begin with main function or function statement(s)");
+                return null;
+            }
+            else
+            {
+                program.Children.Add(Function_Statements());
+                program.Children.Add(Main_Function());
+
+                MessageBox.Show("Success");
+
+            }
+                return program;
         }
+
 
         Node Main_Function()
         {
             Node main_function = new Node("MainFunction");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -70,7 +89,7 @@ namespace TINY_Compiler
         {
             Node datatype = new Node("Datatype");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -96,7 +115,7 @@ namespace TINY_Compiler
         {
             Node function_statements = new Node("FunctionStatements");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             // check the function statements sructure
@@ -112,7 +131,7 @@ namespace TINY_Compiler
         {
             Node function_statement = new Node("FunctionStatement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -135,7 +154,7 @@ namespace TINY_Compiler
         {
             Node function_statments_dash = new Node("FunctionStatementsDash");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -157,7 +176,7 @@ namespace TINY_Compiler
         {
             Node function_decl = new Node("FunctionDecl");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             // check the function declaration structure
@@ -177,7 +196,7 @@ namespace TINY_Compiler
         {
             Node function_body = new Node("FunctionBody");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             // check the function body structure
@@ -196,7 +215,7 @@ namespace TINY_Compiler
         {
             Node function_call = new Node("FunctionCall");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -220,7 +239,7 @@ namespace TINY_Compiler
         {
             Node expression = new Node("Expression");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -247,7 +266,7 @@ namespace TINY_Compiler
         {
             Node term = new Node("Term");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -278,7 +297,7 @@ namespace TINY_Compiler
         {
             Node identifier_list = new Node("IdentifierList");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             // check the identifier list structure
@@ -294,7 +313,7 @@ namespace TINY_Compiler
         {
             Node identifier_list_dash = new Node("IdentifierListDash");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             // check the identifier list dash structure
@@ -314,7 +333,7 @@ namespace TINY_Compiler
         {
             Node id = new Node("Id");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             // check the id structure
@@ -330,7 +349,7 @@ namespace TINY_Compiler
         {
             Node id_dash = new Node("IdDash");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             // check the id dash structure
@@ -349,7 +368,7 @@ namespace TINY_Compiler
         {
             Node statement = new Node("Statement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -395,7 +414,7 @@ namespace TINY_Compiler
         {
             Node assignment_statement = new Node("AssignmentStatement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -416,7 +435,7 @@ namespace TINY_Compiler
         {
             Node declaration_statement = new Node("DeclarationStatement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -436,7 +455,7 @@ namespace TINY_Compiler
         {
             Node if_statement = new Node("IfStatement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -461,7 +480,7 @@ namespace TINY_Compiler
         {
             Node else_if_statement = new Node("ElseIfStatement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_Class = TokenStream[InputPointer].token_type;
@@ -488,7 +507,7 @@ namespace TINY_Compiler
         {
             Node else_statement = new Node("ElseStatement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_Class = TokenStream[InputPointer].token_type;
@@ -511,7 +530,7 @@ namespace TINY_Compiler
         {
             Node repeat_statement = new Node("RepeatStatement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -532,7 +551,7 @@ namespace TINY_Compiler
         {
             Node statements = new Node("Statements");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -556,7 +575,7 @@ namespace TINY_Compiler
         {
             Node statements = new Node("StatementsDash");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -582,7 +601,7 @@ namespace TINY_Compiler
         {
             Node write_statement = new Node("WriteStatement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
 
@@ -599,7 +618,7 @@ namespace TINY_Compiler
         Node Write_Statement_Dash()
         {
             Node write_statement_dash = new Node("WriteStatementDash");
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -628,7 +647,7 @@ namespace TINY_Compiler
         {
             Node read_statement = new Node("ReadStatement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
 
@@ -647,7 +666,7 @@ namespace TINY_Compiler
         {
             Node ret_statement = new Node("RetStatement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
 
@@ -665,7 +684,7 @@ namespace TINY_Compiler
         {
             Node return_statement = new Node("ReturnStatement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
 
@@ -684,7 +703,7 @@ namespace TINY_Compiler
         {
             Node condition_statement = new Node("ConditionStatement");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
 
@@ -702,7 +721,7 @@ namespace TINY_Compiler
         {
             Node condition_statement_dash = new Node("ConditionStatementDash");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -724,7 +743,7 @@ namespace TINY_Compiler
         {
             Node condition = new Node("Condition");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             // check the condition  structure
@@ -742,7 +761,7 @@ namespace TINY_Compiler
         {
             Node equation = new Node("Equation");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             // check the equation structure
@@ -767,7 +786,7 @@ namespace TINY_Compiler
         {
             Node equation_dash = new Node("EquationDash");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             // check the equation dash structure
@@ -786,7 +805,7 @@ namespace TINY_Compiler
         {
             Node arithmetic_ops = new Node("ArithmeticOps");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -804,7 +823,7 @@ namespace TINY_Compiler
         {
             Node condition_ops = new Node("ConditionOps");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -822,7 +841,7 @@ namespace TINY_Compiler
         {
             Node boolean_ops = new Node("BooleanOps");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
             Token_Class token_class_type = TokenStream[InputPointer].token_type;
@@ -840,7 +859,7 @@ namespace TINY_Compiler
         {
             Node parameter = new Node("Parameter");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
 
@@ -860,7 +879,7 @@ namespace TINY_Compiler
         {
             Node parameters = new Node("Parameters");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
 
@@ -878,7 +897,7 @@ namespace TINY_Compiler
         {
             Node parameters_dash = new Node("ParametersDash");
 
-            if (!(InputPointer < TokenStream.Count - 1))
+            if (InputPointer >= TokenStream.Count)
                 return null;
 
 
@@ -920,7 +939,9 @@ namespace TINY_Compiler
             else
             {
                 Errors.Error_List.Add("Parsing Error: Expected "
-                        + ExpectedToken.ToString()  + "\r\n");
+                        + ExpectedToken.ToString() + " and " +
+                        TokenStream[InputPointer].token_type.ToString() +
+                        "  found at " + TokenStream[InputPointer].lex.ToString() + "\r\n");
                 InputPointer++;
                 return null;
             }
