@@ -7,5 +7,5 @@ analysis.
 
 ## Features
 * Lexical Analysis: Tokenizes the input source code into a stream of tokens.
-* Syntax Parsing: Parses the token stream to create an abstract syntax tree (AST).
+* Syntax Parsing: Parses the token stream to create a parse tree.
 
