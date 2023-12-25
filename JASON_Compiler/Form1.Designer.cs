@@ -50,27 +50,29 @@
             this.textBox1.Margin = new System.Windows.Forms.Padding(2);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(354, 405);
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox1.Size = new System.Drawing.Size(274, 405);
             this.textBox1.TabIndex = 0;
             // 
             // textBox2
             // 
             this.textBox2.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Location = new System.Drawing.Point(630, 339);
+            this.textBox2.Location = new System.Drawing.Point(535, 339);
             this.textBox2.Margin = new System.Windows.Forms.Padding(2);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(314, 93);
+            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox2.Size = new System.Drawing.Size(409, 93);
             this.textBox2.TabIndex = 1;
             // 
             // button1
             // 
             this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button1.Location = new System.Drawing.Point(414, 387);
+            this.button1.Location = new System.Drawing.Point(339, 390);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(85, 45);
+            this.button1.Size = new System.Drawing.Size(66, 42);
             this.button1.TabIndex = 2;
             this.button1.Text = "Compile !";
             this.button1.UseVisualStyleBackColor = true;
@@ -85,11 +87,11 @@
             this.Column1,
             this.Column2});
             this.dataGridView1.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.dataGridView1.Location = new System.Drawing.Point(378, 27);
+            this.dataGridView1.Location = new System.Drawing.Point(287, 27);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(234, 350);
+            this.dataGridView1.Size = new System.Drawing.Size(244, 358);
             this.dataGridView1.TabIndex = 3;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -107,18 +109,18 @@
             // 
             this.treeView1.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.treeView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.treeView1.Location = new System.Drawing.Point(630, 27);
+            this.treeView1.Location = new System.Drawing.Point(535, 27);
             this.treeView1.Margin = new System.Windows.Forms.Padding(2);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(314, 295);
+            this.treeView1.Size = new System.Drawing.Size(409, 295);
             this.treeView1.TabIndex = 4;
             // 
             // button2
             // 
             this.button2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button2.Location = new System.Drawing.Point(504, 387);
+            this.button2.Location = new System.Drawing.Point(410, 390);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(85, 45);
+            this.button2.Size = new System.Drawing.Size(66, 42);
             this.button2.TabIndex = 5;
             this.button2.Text = "Clear All";
             this.button2.UseVisualStyleBackColor = true;
@@ -138,7 +140,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label2.Location = new System.Drawing.Point(627, 12);
+            this.label2.Location = new System.Drawing.Point(536, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 13);
             this.label2.TabIndex = 7;
@@ -148,7 +150,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label3.Location = new System.Drawing.Point(627, 324);
+            this.label3.Location = new System.Drawing.Point(536, 324);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(36, 13);
             this.label3.TabIndex = 8;

@@ -304,7 +304,6 @@ namespace TINY_Compiler
             {
                 identifier_list.Children.Add(Id());
                 identifier_list.Children.Add(Identifier_List_Dash());
-
             }
 
             return identifier_list;

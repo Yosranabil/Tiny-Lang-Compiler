@@ -11,8 +11,7 @@ public enum Token_Class
     T_Else, T_ElseIf, T_Endl, T_If, T_Integer, T_Float, T_String, T_Read, T_Then, T_Write, T_Repeat, T_Until, T_Return, T_Main, T_End,
     T_AndOp, T_OrOp, T_Semicolon, T_Comma, T_LParanthesis, T_RParanthesis, T_LCurlBracket, T_RCurlBracket, T_EqualOp, T_LessThanOp,
     T_GreaterThanOp, T_NotEqualOp, T_PlusOp, T_MinusOp, T_MultiplyOp, T_DivideOp, T_AssignmentOp,
-    T_Identifier, T_Number, T_String_Literal, T_Float_Literal,
-    T_DataType
+    T_Identifier, T_Number, T_String_Literal, T_Float_Literal, T_DataType
 }
 namespace TINY_Compiler
 {
