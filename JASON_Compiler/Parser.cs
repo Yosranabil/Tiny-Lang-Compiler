@@ -155,7 +155,9 @@ namespace TINY_Compiler
             Token_Class token_class_next_type = TokenStream[InputPointer + 1].token_type;
 
             // check the function statements dash sructure
-            if ((token_class_type == Token_Class.T_Integer && token_class_next_type != Token_Class.T_Main) || (token_class_type == Token_Class.T_Float && token_class_next_type != Token_Class.T_Main) || (token_class_type == Token_Class.T_String && token_class_next_type != Token_Class.T_Main))
+            if ((token_class_type == Token_Class.T_Integer && token_class_next_type != Token_Class.T_Main) ||
+                (token_class_type == Token_Class.T_Float && token_class_next_type != Token_Class.T_Main) ||
+                (token_class_type == Token_Class.T_String && token_class_next_type != Token_Class.T_Main))
             {
                 function_statments_dash.Children.Add(Function_Statement());
                 function_statments_dash.Children.Add(Function_Statements_Dash());
@@ -173,7 +175,9 @@ namespace TINY_Compiler
                 return null;
 
             // check the function declaration structure
-            if (TokenStream[InputPointer].token_type == Token_Class.T_Integer || TokenStream[InputPointer].token_type == Token_Class.T_Float || TokenStream[InputPointer].token_type == Token_Class.T_String)
+            if (TokenStream[InputPointer].token_type == Token_Class.T_Integer ||
+                TokenStream[InputPointer].token_type == Token_Class.T_Float ||
+                TokenStream[InputPointer].token_type == Token_Class.T_String)
             {
                 function_decl.Children.Add(Datatype());
                 function_decl.Children.Add(match(Token_Class.T_Identifier));
@@ -319,9 +323,14 @@ namespace TINY_Compiler
                 identifier_list_dash.Children.Add(match(Token_Class.T_Comma));
                 identifier_list_dash.Children.Add(Id());
                 identifier_list_dash.Children.Add(Identifier_List_Dash());
+
+                return identifier_list_dash;
+            }
+            else
+            {
+                return null;
             }
 
-            return identifier_list_dash;
         }
 
         Node Id()
@@ -350,9 +359,13 @@ namespace TINY_Compiler
             {
                 id_dash.Children.Add(match(Token_Class.T_AssignmentOp));
                 id_dash.Children.Add(Expression());
-            }
 
-            return id_dash;
+                return id_dash;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         Node Statement()
@@ -378,7 +391,9 @@ namespace TINY_Compiler
             {
                 statement.Children.Add(Assignment_Statement());
             }
-            else if (token_class_type == Token_Class.T_Integer || token_class_type == Token_Class.T_Float || token_class_type == Token_Class.T_String)
+            else if (token_class_type == Token_Class.T_Integer ||
+                token_class_type == Token_Class.T_Float ||
+                token_class_type == Token_Class.T_String)
             {
                 statement.Children.Add(Declaration_Statement());
             }
@@ -542,9 +557,12 @@ namespace TINY_Compiler
             Token_Class token_class_next_type = TokenStream[InputPointer + 1].token_type;
 
             // check the statements dash structure
-            if (token_class_type == Token_Class.T_Read || token_class_type == Token_Class.T_Write || token_class_type == Token_Class.T_Repeat ||
+            if (token_class_type == Token_Class.T_Read || token_class_type == Token_Class.T_Write ||
+                token_class_type == Token_Class.T_Repeat ||
                 token_class_next_type == Token_Class.T_AssignmentOp ||
-                token_class_type == Token_Class.T_Integer || token_class_type == Token_Class.T_Float || token_class_type == Token_Class.T_String ||
+                token_class_type == Token_Class.T_Integer ||
+                token_class_type == Token_Class.T_Float ||
+                token_class_type == Token_Class.T_String ||
                 token_class_type == Token_Class.T_If ||
                 (token_class_type == Token_Class.T_Identifier && token_class_next_type == Token_Class.T_LParanthesis))
             {
